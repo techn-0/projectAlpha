@@ -22,13 +22,13 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        //  움직임 구현 방법 3가지
+        // //  움직임 구현 방법 3가지
 
-        // 1. 물리적인 힘을 주는 것
-        rigid.AddForce(inputVec * 10f);
+        // // 1. 물리적인 힘을 주는 것
+        // rigid.AddForce(inputVec * 10f);
 
-        // 2. 속도 제어
-        rigid.linearVelocity = inputVec;
+        // // 2. 속도 제어
+        // rigid.linearVelocity = inputVec;
 
         // 3. 위치 이동
         rigid.MovePosition(rigid.position + inputVec);
