@@ -3,7 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Vector2 inputVec; // public 붙이면 인스펙터에서 확인 가능
-
+    public float speed; // 플레이어 이동 속도
     Rigidbody2D rigid;
 
 
@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector2 nexstVec = inputVec.normalized * speed * Time.fixedDeltaTime; // 물리프레임 하나가 소비된시간을 곱해줌
         // //  움직임 구현 방법 3가지
 
         // // 1. 물리적인 힘을 주는 것
@@ -31,6 +32,6 @@ public class Player : MonoBehaviour
         // rigid.linearVelocity = inputVec;
 
         // 3. 위치 이동
-        rigid.MovePosition(rigid.position + inputVec);
+        rigid.MovePosition(rigid.position + nexstVec);
     }
 }
