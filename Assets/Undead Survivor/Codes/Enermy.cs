@@ -29,4 +29,8 @@ public class Enermy : MonoBehaviour
         if (!isLive) return; // 플레이어가 죽었으면 실행하지 않음
         spriteRender.flipX = target.position.x < rigid.position.x; // 플레이어 위치에 따라 스프라이트 뒤집기
     }
+    void OnEnable()
+    {
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>(); // 플레이어의 Rigidbody2D 컴포넌트 할당
+    }
 }
