@@ -6,12 +6,14 @@ public class Player : MonoBehaviour
     public Vector2 inputVec; // public 붙이면 인스펙터에서 확인 가능
     public float speed; // 플레이어 이동 속도
     Rigidbody2D rigid;
+    SpriteRenderer spriteRender;
 
 
     // 초기화는 Awake에서 자주함
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        spriteRender = GetComponent<SpriteRenderer>();
     }
 
     // void Update()
@@ -39,5 +41,19 @@ public class Player : MonoBehaviour
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>(); // 노멀라이즈 내장
+    }
+
+
+    // 프레임 종료후 다음 프레임 넘어가기 직전에 실행되는 생명주기 함수
+    void LateUpdate()
+    {
+        if (inputVec.x != 0)
+        {
+            spriteRender.flipX = inputVec.x < 0; // 왼쪽으로 이동시 스프라이트를 뒤집음
+        }
+        else if (inputVec.y != 0)
+        {
+            spriteRender.flipX = inputVec.y < 0; // 위로 이동시 스프라이트를 뒤집음
+        }
     }
 }
