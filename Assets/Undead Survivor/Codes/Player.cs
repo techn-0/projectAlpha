@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public float speed; // 플레이어 이동 속도
     Rigidbody2D rigid;
     SpriteRenderer spriteRender;
+    Animator anima;
 
 
     // 초기화는 Awake에서 자주함
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRender = GetComponent<SpriteRenderer>();
+        anima = GetComponent<Animator>();
     }
 
     // void Update()
@@ -47,13 +49,10 @@ public class Player : MonoBehaviour
     // 프레임 종료후 다음 프레임 넘어가기 직전에 실행되는 생명주기 함수
     void LateUpdate()
     {
+        anima.SetFloat("Speed", inputVec.magnitude); // 애니메이션 변수 Speed 설정
         if (inputVec.x != 0)
         {
             spriteRender.flipX = inputVec.x < 0; // 왼쪽으로 이동시 스프라이트를 뒤집음
-        }
-        else if (inputVec.y != 0)
-        {
-            spriteRender.flipX = inputVec.y < 0; // 위로 이동시 스프라이트를 뒤집음
         }
     }
 }
