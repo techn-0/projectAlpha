@@ -21,4 +21,9 @@ public class Enermy : MonoBehaviour
         rigid.MovePosition(rigid.position + nextVec); // 위치 이동
         rigid.linearVelocity = Vector2.zero; // 물리적인 힘을 주지 않음
     }
+
+    void LateUpdate()
+    {
+        spriteRender.flipX = target.position.x < rigid.position.x; // 플레이어 위치에 따라 스프라이트 뒤집기
+    }
 }
