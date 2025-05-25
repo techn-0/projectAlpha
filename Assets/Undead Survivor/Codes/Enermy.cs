@@ -2,16 +2,25 @@ using UnityEngine;
 
 public class Enermy : MonoBehaviour
 {
+    // ----------------------------------------------------------
     public float speed; // 이동 속도
+    public float attackRange; // 공격 범위(체스말로 변경할때 쓸거같아서 일단 추가)
+    public float health; // 체력
+    public float maxHealth; // 최대 체력
+    // -----------------------------------------------------------
+
+    public RuntimeAnimatorController[] animController; // 애니메이션 컨트롤러
     public Rigidbody2D target; // 플레이어의 Rigidbody2D 컴포넌트
 
-    bool isLive = true; // 플레이어가가 살아있는지
+    bool isLive; // 플레이어가가 살아있는지
 
     Rigidbody2D rigid;
+    Animator anim;
     SpriteRenderer spriteRender;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         spriteRender = GetComponent<SpriteRenderer>();
     }
     void FixedUpdate()
@@ -32,5 +41,15 @@ public class Enermy : MonoBehaviour
     void OnEnable()
     {
         target = GameManager.instance.player.GetComponent<Rigidbody2D>(); // 플레이어의 Rigidbody2D 컴포넌트 할당
+        isLive = true; // 활성화되면 살아있음
+        health = maxHealth; // 체력 초기화
+    }
+
+    public void Init(SpawnData data)
+    {
+        anim.runtimeAnimatorController = animController[data.spriteType]; // 애니메이션 컨트롤러 설정
+        speed = data.speed; // 이동 속도 설정
+        maxHealth = data.health; // 최대 체력 설정
+        health = maxHealth; // 체력 초기화
     }
 }
