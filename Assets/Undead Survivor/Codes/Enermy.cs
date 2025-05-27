@@ -52,4 +52,29 @@ public class Enermy : MonoBehaviour
         maxHealth = data.health; // 최대 체력 설정
         health = maxHealth; // 체력 초기화
     }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Bullet")) // 총알과 충돌했을 때
+        {
+            health -= collision.GetComponent<Bullet>().damage; // 체력 감소
+
+            if (health > 0)
+            {
+                //hit aciton
+            }
+            else
+            {
+                // 쥬금
+                Dead();
+
+            }
+
+        }
+    }
+    void Dead()
+    {
+        gameObject.SetActive(false); // 오브젝트 비활성화
+    }
+
 }
