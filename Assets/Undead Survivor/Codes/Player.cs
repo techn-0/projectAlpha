@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     public Vector2 inputVec; // public 붙이면 인스펙터에서 확인 가능
     public float speed; // 플레이어 이동 속도
+    public Scanner scanner; // 스캐너 컴포넌트
     Rigidbody2D rigid;
     SpriteRenderer spriteRender;
     Animator anima;
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriteRender = GetComponent<SpriteRenderer>();
         anima = GetComponent<Animator>();
+        scanner = GetComponent<Scanner>();
     }
 
     // void Update()
