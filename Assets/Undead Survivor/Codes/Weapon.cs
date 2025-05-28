@@ -18,11 +18,26 @@ public class Weapon : MonoBehaviour
         switch (id)
         {
             case 0:
-                transform.Rotate(Vector3.forward * speed * Time.deltaTime); // 무기 회전
+                transform.Rotate(Vector3.back * speed * Time.deltaTime); // 무기 회전
                 break;
             default:
                 break;
         }
+
+        // test
+        if (Input.GetKeyDown(KeyCode.Space)) // 스페이스바 키를 누르면
+        {
+            LevelUp(20, 5); // 레벨업
+        }
+    }
+
+    public void LevelUp(float damage, int count)
+    {
+        this.damage += damage; // 데미지 증가
+        this.count += count; // 개수 증가
+
+        if (id == 0)
+            Placement(); // 무기 ID가 0일 때 배치 함수 호출
     }
 
     public void Init()
@@ -31,7 +46,7 @@ public class Weapon : MonoBehaviour
         {
             case 0:
                 // 무기 ID가 0일 때의 초기화 로직
-                speed = -150;
+                speed = 150;
                 Placement(); // 배치 함수 호출
                 break;
             default:
@@ -43,8 +58,20 @@ public class Weapon : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            Transform bullet = GameManager.instance.pool.GetObject(prefabId).transform; // 풀에서 오브젝트 가져오기
-            bullet.parent = transform; // 현재 오브젝트의 자식으로 설정
+            Transform bullet;
+            if (i < transform.childCount)
+            {
+                bullet = transform.GetChild(i); // 기존 자식 오브젝트 재사용
+            }
+            else
+            {
+                bullet = GameManager.instance.pool.GetObject(prefabId).transform.transform; // 새로운 자식 오브젝트 생성
+                bullet.parent = transform; // 부모 설정
+            }
+
+            // 위치와 회전 초기화
+            bullet.localPosition = Vector3.zero; // 위치 초기화
+            bullet.localRotation = Quaternion.identity; // 회전 초기화
 
             Vector3 rotVec = Vector3.forward * 360f * i / count; 
             bullet.Rotate(rotVec); // 회전 설정
