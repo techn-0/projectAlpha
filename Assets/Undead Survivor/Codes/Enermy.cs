@@ -16,12 +16,14 @@ public class Enermy : MonoBehaviour
     bool isLive; // 플레이어가가 살아있는지
 
     Rigidbody2D rigid;
+    Collider2D collider;
     Animator anim;
     SpriteRenderer spriteRender;
     WaitForFixedUpdate wait;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
         spriteRender = GetComponent<SpriteRenderer>();
         wait = new WaitForFixedUpdate();
@@ -45,6 +47,13 @@ public class Enermy : MonoBehaviour
     {
         target = GameManager.instance.player.GetComponent<Rigidbody2D>(); // 플레이어의 Rigidbody2D 컴포넌트 할당
         isLive = true; // 활성화되면 살아있음
+
+        isLive = true;
+        collider.enabled = true;
+        rigid.simulated = true;
+        spriteRender.sortingOrder = 2;
+        anim.SetBool("Dead", false);
+
         health = maxHealth; // 체력 초기화
     }
 
@@ -70,8 +79,11 @@ public class Enermy : MonoBehaviour
             else
             {
                 // 쥬금
-                Dead();
-
+                isLive = false; // 살아있지 않음
+                collider.enabled = false; // 충돌체 비활성화
+                rigid.simulated = false; // 물리 시뮬레이션 비활성화
+                spriteRender.sortingOrder = 1; // 스프라이트 정렬 순서 초기화
+                anim.SetBool("Dead", true); // 죽었을 때 애니메이션 트리거
             }
 
         }
