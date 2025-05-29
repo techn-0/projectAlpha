@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enermy : MonoBehaviour
@@ -17,15 +18,17 @@ public class Enermy : MonoBehaviour
     Rigidbody2D rigid;
     Animator anim;
     SpriteRenderer spriteRender;
+    WaitForFixedUpdate wait;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRender = GetComponent<SpriteRenderer>();
+        wait = new WaitForFixedUpdate();
     }
     void FixedUpdate()
     {
-        if (!isLive) return; // 플레이어가 죽었으면 이동하지 않음
+        if (!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit")) return; // 플레이어가 죽었거나 몹이 맞았을 때 실행하지 않음
 
         Vector2 dirVec = target.position - rigid.position; // 플레이어와의 방향 벡터
         Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime; // 이동할 위치 계산
@@ -58,10 +61,11 @@ public class Enermy : MonoBehaviour
         if (collision.CompareTag("Bullet")) // 총알과 충돌했을 때
         {
             health -= collision.GetComponent<Bullet>().damage; // 체력 감소
+            StartCoroutine(KnockBack()); // 넉백 효과 적용
 
             if (health > 0)
             {
-                //hit aciton
+                anim.SetTrigger("Hit"); // 맞았을 때 애니메이션 트리거
             }
             else
             {
@@ -71,6 +75,13 @@ public class Enermy : MonoBehaviour
             }
 
         }
+    }
+    IEnumerator KnockBack()
+    {
+        yield return wait; // 물리 프레임 딜레이
+        Vector3 playerPos = GameManager.instance.player.transform.position; // 플레이어 위치
+        Vector3 dirVec = (transform.position - playerPos).normalized; // 플레이어와의 방향 벡터
+        rigid.AddForce(dirVec * 3, ForceMode2D.Impulse); // 넉백 힘 적용
     }
     void Dead()
     {
