@@ -67,26 +67,30 @@ public class Enermy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Bullet")) // 총알과 충돌했을 때
+        if (!collision.CompareTag("Bullet") || !isLive) // 충돌한 오브젝트가 Bullet 태그가 아니거나 플레이어가 죽었으면 실행하지 않음
+            return;
+
+        health -= collision.GetComponent<Bullet>().damage; // 체력 감소
+        StartCoroutine(KnockBack()); // 넉백 효과 적용
+
+        if (health > 0)
         {
-            health -= collision.GetComponent<Bullet>().damage; // 체력 감소
-            StartCoroutine(KnockBack()); // 넉백 효과 적용
-
-            if (health > 0)
-            {
-                anim.SetTrigger("Hit"); // 맞았을 때 애니메이션 트리거
-            }
-            else
-            {
-                // 쥬금
-                isLive = false; // 살아있지 않음
-                collider.enabled = false; // 충돌체 비활성화
-                rigid.simulated = false; // 물리 시뮬레이션 비활성화
-                spriteRender.sortingOrder = 1; // 스프라이트 정렬 순서 초기화
-                anim.SetBool("Dead", true); // 죽었을 때 애니메이션 트리거
-            }
-
+            anim.SetTrigger("Hit"); // 맞았을 때 애니메이션 트리거
         }
+        else
+        {
+            // 쥬금
+            isLive = false; // 살아있지 않음
+            collider.enabled = false; // 충돌체 비활성화
+            rigid.simulated = false; // 물리 시뮬레이션 비활성화
+            spriteRender.sortingOrder = 1; // 스프라이트 정렬 순서 초기화
+            anim.SetBool("Dead", true); // 죽었을 때 애니메이션 트리거
+
+            // 경험치
+            GameManager.instance.kill++; // 처치 수 증가
+            GameManager.instance.GetExp(); // 경험치 획득
+        }
+
     }
     IEnumerator KnockBack()
     {
