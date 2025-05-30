@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public float gameTime; // 게임 시간
     public float maxGameTime = 2 * 10f; // 최대 게임 시간
     [Header("# 플레이어 정보")]
+    public int health; // 현재 체력
+    public int maxHealth = 100; // 최대 체력
     public int level;
     public int kill;
     public int exp;
@@ -18,6 +20,10 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this; // 싱글톤 패턴
+    }
+    void Start()
+    {
+        health = maxHealth; // 체력 초기화
     }
 
     void Update()
